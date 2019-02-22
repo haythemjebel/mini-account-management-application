@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="Utf-8" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+<title>Votre Banque</title>
+</head>
+<body>
+	<div class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<ul class="nav navbar-nav">
+				<li><a> <img width="80" height="50"
+						src="https://www2.b-a-w.com/banque-assurance/wp-content/uploads/sites/9/2016/09/picto_012.png">
+				</a></li>
+				<li><a th:href="@{/operations}">Operations</a></li>
+				<li class="dropdown"><a class="dropdown-toggle"
+					data-toggle="dropdown" role="button" aria-haspopup="true"
+					aria-expanded="false">Comptes <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a th:href="@{/compte}">Add Compte</a></li>
+					</ul></li>
+				<li class="dropdown"><a class="dropdown-toggle"
+					data-toggle="dropdown" role="button" aria-haspopup="true"
+					aria-expanded="false">Clients <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a th:href="@{/ajouter}">Add Client</a></li>
+						<li><a th:href="@{/clients}">All Clients</a></li>
+					</ul></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a th:href="@{/logout}"
+					th:text="${#session.getAttribute('name')}"></a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">Consultation d'un Compte</div>
+			<div class="panel-body">
+				<form th:action="@{/consulterCompte}" method="get">
+					<div>
+						<label>Code Compte :</label> <input th:value="${codeCompte}"
+							type="text" name="codeCompte"> <input type="submit"
+							value="Find" class="btn btn-primary" />
+					</div>
+				</form>
+				<div class="text-danger" th:if="${excepetion}"
+					th:text="${excepetion.message}"></div>
+			</div>
+		</div>
+		<div class="panel panel-primary" th:if="${compte}">
+			<div class="panel-heading">Information sur vos Compte</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label>Client :</label> <label th:text="${compte.client.nom}"></label>
+				</div>
+				<div class="form-group">
+					<label>Code :</label> <label th:text="${compte.codeCompte}"></label>
+				</div>
+				<div class="form-group">
+					<label>Solde :</label> <label th:text="${compte.solde}"></label>
+				</div>
+				<div class="form-group">
+					<label>Date Creation :</label> <label
+						th:text="${compte.dateCreation}"></label>
+				</div>
+				<div class="form-group">
+					<label>Type :</label> <label th:text="${compte.class.simpleName}"></label>
+				</div>
+				<div class="form-group"
+					th:if="${compte.class.simpleName=='CompteCourant'}">
+					<label>Découvert :</label> <label th:text="${compte.decouvert}"></label>
+				</div>
+				<div class="form-group"
+					th:if="${compte.class.simpleName=='CompteEpargne'}">
+					<label>Taux :</label> <label th:text="${compte.taux}"></label>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="panel panel-primary" th:if="${compte}">
+			<div class="panel-heading">Operation sur le compte</div>
+			<div class="panel-body">
+				<form th:action="@{/saveOperation}" method="post">
+					<div class="form-group">
+						<label>Compte :</label> <input type="hidden" name="codeCompte"
+							th:value="${codeCompte}" /><label th:text="${codeCompte}"></label>
+					</div>
+					<div class="form-group">
+						<input type="radio" name="typeoperation" value="VER"
+							onchange="document.getElementById('forvirement').style.display='none'" />
+						<label>Versement</label> <input type="radio" name="typeoperation"
+							value="RET"
+							onchange="document.getElementById('forvirement').style.display='none'" />
+						<label>Retrait</label> <input checked="checked" type="radio"
+							name="typeoperation" value="VIR"
+							onchange="document.getElementById('forvirement').style.display='block'" />
+						<label>Virement</label>
+					</div>
+					<div class="form-group" id="forvirement">
+						<label>Vers :</label> <input type="text" name="codeCompte2" />
+					</div>
+					<div class="form-group">
+						<label>Montant :</label> <input type="text" name="montant" />
+					</div>
+					<div class="text-danger"
+						th:text="${#httpServletRequest.getParameter('error')}"></div>
+					<button type="submit" class="btn btn-primary">Save</button>
+				</form>
+
+			</div>
+		</div>
+		<div class="panel panel-primary" th:if="${compte}">
+			<div class="panel-heading">Liste des operations</div>
+			<div class="panel-body">
+				<table class="table table-striped">
+					<tr>
+						<th>NUM</th>
+						<th>Type</th>
+						<th>Date</th>
+						<th>Montant</th>
+					</tr>
+					<tr th:each="o:${listopera}">
+						<td th:text="${o.numero}"></td>
+						<td th:text="${o.class.simpleName}"></td>
+						<td th:text="${o.dateOperation}"></td>
+						<td th:text="${o.montant}"></td>
+					</tr>
+				</table>
+				<div class="container col-md-6">
+					<ul class="nav nav-pills">
+						<li th:each="p,status:${pages}"><a th:text="${status.index}"
+							th:href="@{/consulterCompte(codeCompte=${codeCompte},page=${status.index})}"></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<footer class="navbar-fixed-bottom text-center py-3">
+		<div class="container">
+			<p>Copyright@JEBEL</p>
+		</div>
+	</footer>
+</body>
+</html>

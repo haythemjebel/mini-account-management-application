@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="Utf-8" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous" />
+	<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+<title>Votre Banque</title>
+</head>
+<body>
+	<div class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<ul class="nav navbar-nav">
+			<li><a> <img width="80" height="50"
+						src="https://www2.b-a-w.com/banque-assurance/wp-content/uploads/sites/9/2016/09/picto_012.png">
+				</a></li>
+				<li><a th:href="@{/operations}">Operations</a></li>
+				<li class="dropdown"><a class="dropdown-toggle"
+					data-toggle="dropdown" role="button" aria-haspopup="true"
+					aria-expanded="false">Comptes <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a th:href="@{/compte}">Add Compte</a></li>
+					</ul></li>
+				<li class="dropdown"><a class="dropdown-toggle"
+					data-toggle="dropdown" role="button" aria-haspopup="true"
+					aria-expanded="false">Clients <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a th:href="@{/ajouter}">Add Client</a></li>
+						<li><a th:href="@{/clients}">All Clients</a></li>
+					</ul></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a th:href="@{/logout}"
+					th:text="${#session.getAttribute('name')}"></a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="container col-md-6 col-xs-12">
+		<div class="panel panel-primary">
+			<div class="panel-heading">Edit Client</div>
+			<div class="panel-body">
+				<form th:action="@{save}" method="post">
+					<div class="form-group">
+						<label>Code :</label> <input class="form-control"
+							th:value="${client.code}" type="text" name="code" />
+							<span
+							th:errors="${client.code}"></span>
+					</div>
+					<div class="form-group">
+						<label>Nom</label> <input class="form-control"
+							th:value="${client.nom}" type="text" name="nom" /> <span
+							th:errors="${client.nom}"></span>
+					</div>
+					<div class="form-group">
+						<label>Email</label> <input class="form-control"
+							th:value="${client.email}" type="text" name="email" /> <span
+							th:errors="${client.email}"></span>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary">Update</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<footer class="navbar-fixed-bottom text-center py-3">
+		<div class="container">
+			<p>Copyright@JEBEL</p>
+		</div>
+	</footer>
+</body>
+</html>

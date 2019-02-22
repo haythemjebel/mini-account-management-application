@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous" />
+<title>Login</title>
+</head>
+<body>
+	<nav class="navbar navbar-inverse">
+		<div class="text-center">
+			<img width="80" height="50"
+				src="https://www2.b-a-w.com/banque-assurance/wp-content/uploads/sites/9/2016/09/picto_012.png">
+		</div>
+	</nav>
+	<div class="col-md-6 col-xs-12 col-md-offset-3">
+		<div class="panel panel-primary">
+			<div class="panel-heading">Authentification</div>
+			<div class="panel-body">
+				<form th:action="@{/verif}" method="post">
+					<div class="form-group">
+						<label>Username :</label> <input type="text" name="id" />
+					</div>
+					<div class="form-group">
+						<label>Password :</label> <input type="password" name="password" />
+					</div>
+					<button type="submit" class="btn btn-primary form-group">Login</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<footer class="navbar-fixed-bottom text-center py-3">
+		<div class="container">
+			<p>Copyright@JEBEL</p>
+		</div>
+	</footer>
+</body>
+</html>
